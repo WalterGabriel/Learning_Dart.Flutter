@@ -3,7 +3,7 @@ void main() {
 }
 
 class ContaCorrente {
-  String titular;
+  String nome;
   int agencia;
   int conta;
   double saldo;
