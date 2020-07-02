@@ -9,9 +9,3 @@ class ContaCorrente {
   double saldo;
 }
 
-class ContaPoupanca {
-  String titular;
-  int agencia;
-  int conta;
-  double saldo;
-}
