@@ -9,7 +9,6 @@ switch(Variável){
   *processo*;
   break;
 } */
-import "dart:io"; //Incorpora a biblioteca de interface
 
 void main() {
   int mes = 1;
