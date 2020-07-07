@@ -1,53 +1,38 @@
-/* COMPOSIÇÃO DE CLASSES:
-  1 -  Uma pode utilizar outras como uma propriedade.*/
+/*IMPORTAÇÃO DE CLASSES:
+  Nesta etapa as classes criadas anteriormente para compor nosso programa foram separadas do arquivo principal do código. Na pasta lib, então, existem dois arquivos responsáveis por conter as classes Cliente e ContaCorrente. Mas para que o programa possa continuar utilizando as informações contidas nessas classes, precisamos indicar no código principal a importações dos arquivos referentes a elas:*/
+
+import 'package:alura_bank/cliente.dart';
+import 'package:alura_bank/contaCorrente.dart';
 
 void main() {
-  var conta001 = ContaCorrente();
+  // ignore: omit_local_variable_types
+  ContaCorrente conta001 = ContaCorrente();
 
   // ignore: omit_local_variable_types
   Cliente amanda = Cliente();
   amanda.nome = 'Amanda';
   amanda.cpf = '098.344.890-45';
   amanda.profissao = 'Programadora';
-
   conta001.titular = amanda;
 
   print('Titular: ${conta001.titular.nome}');
   print('CPF: ${conta001.titular.cpf}');
   print('Profissão: ${conta001.titular.profissao}');
-}
 
-//Criação classe cliente
-class Cliente {
-  String nome;
-  String cpf;
-  String profissao;
-}
+//Podemos acessar campos em cascata com as propriedades de uma classe:
 
-//Criação da classe conta corrente.
-class ContaCorrente {
-  Cliente titular;
-  int agencia;
-  int conta;
-  double saldo = 0.0;
-  double chequeEspecial = -100.00;
+// ignore: omit_local_variable_types
+  ContaCorrente conta002 = ContaCorrente();
 
-//Método saque
-  void saque(double valorDoSaque) {
-    if (saldo - valorDoSaque < -100) {
-      print(
-          'Sem saldo suficiente para realizar o saque de $valorDoSaque seu saque máximo é de ${saldo + 100}');
-    } else {
-      print('Saque de R\$ $valorDoSaque');
-      saldo -= valorDoSaque;
+// ignore: omit_local_variable_types
+  Cliente tiago = Cliente()
+    ..nome = 'Tiago'
+    ..cpf = '345.634.346-54'
+    ..profissao = 'Designer';
 
-      print('Novo saldo da ${titular} é de: R\$ ${saldo}');
-    }
-  }
+  conta002.titular = tiago;
 
-//Método deposito
-  double deposito(double valorDoDeposito) {
-    saldo += valorDoDeposito;
-    return saldo;
-  }
+  print('Titular: ${conta002.titular.nome}');
+  print('CPF: ${conta002.titular.cpf}');
+  print('Profissão: ${conta002.titular.profissao}');
 }
