@@ -35,4 +35,7 @@ void main() {
   print('Titular: ${conta002.titular.nome}');
   print('CPF: ${conta002.titular.cpf}');
   print('Profissão: ${conta002.titular.profissao}');
+
+  conta001.transferencia(100.0, conta002);
+  print(conta002.obterSaldo());
 }
