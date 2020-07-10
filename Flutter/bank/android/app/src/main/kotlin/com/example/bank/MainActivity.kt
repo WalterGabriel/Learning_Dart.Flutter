@@ -1,4 +1,4 @@
-package com.example.bytebank
+package com.example.bank
 
 import io.flutter.embedding.android.FlutterActivity
 
