@@ -34,7 +34,7 @@ void main() {
   Podemos juntar dois objetos atribuindo um ao outro como fazemos com qualquer variável. ex:*/
 
   cC001 = cC002;
-  print("APÓS MERGE");
+  print('APÓS MERGE');
   print('Hash Code cC001: ${cC001.hashCode}');
   print('Hash Code cC002: ${cC002.hashCode}');
 }
