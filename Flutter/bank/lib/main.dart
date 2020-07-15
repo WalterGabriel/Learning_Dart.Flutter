@@ -3,45 +3,56 @@ import 'package:flutter/material.dart';
 void main() {
   /*  
   1. runaApp é onde será gerada a interface do App na tela do celular;
-  2. Para adicionar elementos da interface trazidos do arquivo"material.dart" entre o tipo do elemento (no exemplo, Texto), seguido do tipo do dado necessário (String) e sua formatação (textDirection.ltr).
+  2. Para adicionar elementos da interface trazidos do framework insira o nome da classe, ou seja, Widgets como MaterialApp, seguido do tipo de dado necessário (String) e sua formatação (textDirection.ltr).
   3. Propriedades de formatação são acessadas através dos pontos (.)
   */
 
   /*MaterialAPP:
   É uma classe que contém, por padrão, uma série de objetos baseados no Material Design da Google. Ele se trata de um Widget que prepara o terreno para um app baseado no Material Design.*/
 
-  /*Scaffold:
-  É o WidGet que importa todo o visual padrão dos layouts de apps baseados em Material Design*/
+  /*
+  Scaffold:
+  É o WidGet que importa todo o visual padrão dos layouts de apps baseados em Material Design
 
-  /*Dentros dos Widgets existem uma série de propriedades, às vezes com uma declaração obrigatória para seu funcionamento:
+  Dentros dos Widgets existem uma série de propriedades, às vezes com uma declaração obrigatória para seu funcionamento:
 
   - No exemplo abaixo é declarado que o widget ou "tela" de inicio do MaterialApp será o layout Scafoold (comando home:)
 
   - Já dentro do Scafold a propriedade "appBar:"" indica que o barra do layout do app será o widget Appbar() e receberá um "title:".
 
-  Na propriedade à seguir o nosso layout (Scaffold) recebe também um botão flutuante: "floatingActionButton: " */
+  Na propriedade à seguir o nosso layout (Scaffold) recebe também um botão flutuante: "floatingActionButton: " 
+  */
 
-  runApp(
-    MaterialApp(
+  runApp(BytebankApp());
+}
+
+class BytebankApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
       home: Scaffold(
-        body: ListaTransferencia(),
-        appBar: AppBar(
-          title: Text('Transferências'),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          child: Icon(Icons.add),
-        ),
+        body: FormularioTransferencia(),
       ),
-    ),
-  );
+    );
+  }
+}
+
+class FormularioTransferencia extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        appBar: AppBar(
+          title: Text('Criar AppBar'),
+        ),
+        body: Text('Ola Flutter'));
+  }
 }
 
 /* 
 
 Refatoramento de código:
-  - Podemos criar classes compostas de várias elementos e transforma-los em um Widget,
-  para isso, declara-se a classe e em seguida utilizamos o comando extends para transformar a classe num Widget. Depois disso, sobrecreve-se o método createElement.
+  - Podemos criar classes compostas de vários elementos e transforma-los em um Widget,
+  para isso, declara-se a classe e em seguida utilizamos o comando extends para transformar a classe num Widget. Depois disso, sobrecreve-se o método build.
   
   - Existem três maneiras de criar um Widget:
   - Widget: Criação de Widgets de baixo nível, composto por elementos básicos da linguagem.
@@ -55,11 +66,21 @@ Refatoramento de código:
 class ListaTransferencia extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: <Widget>[
-        ItemTransferencia(Transferencia(100.0, 064)),
-        ItemTransferencia(Transferencia(200.0, 520)),
-      ],
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Transferências'),
+      ),
+      body: Column(
+        children: <Widget>[
+          ItemTransferencia(Transferencia(100.0, 064)),
+          ItemTransferencia(Transferencia(200.0, 520)),
+          ItemTransferencia(Transferencia(300.0, 520)),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
