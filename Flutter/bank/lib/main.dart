@@ -38,13 +38,64 @@ class BytebankApp extends StatelessWidget {
 }
 
 class FormularioTransferencia extends StatelessWidget {
+  final TextEditingController _controladorCampoNumeroConta =
+      TextEditingController();
+  final TextEditingController _controladorCampoValor = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Criar AppBar'),
-        ),
-        body: Text('Ola Flutter'));
+      appBar: AppBar(
+        title: Text('Criar AppBar'),
+      ),
+      body: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              controller: _controladorCampoNumeroConta,
+              style: TextStyle(fontSize: 16.0),
+              decoration: InputDecoration(
+                  labelText: 'Número da conta', hintText: 'XXX.XXX.XX'),
+              keyboardType: TextInputType.number,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              controller: _controladorCampoValor,
+              style: TextStyle(fontSize: 16.0),
+              decoration: InputDecoration(
+                  icon: Icon(Icons.monetization_on),
+                  labelText: 'Valor',
+                  hintText: '0.00'),
+              keyboardType: TextInputType.number,
+            ),
+          ),
+          RaisedButton(
+            onPressed: () {
+              debugPrint('Toque no confirmar');
+              final int numeroConta =
+                  int.tryParse(_controladorCampoNumeroConta.text);
+              final double valor = double.tryParse(_controladorCampoValor.text);
+
+              if (numeroConta != null && valor != null) {
+                final transferenciaCriada = Transferencia(valor, numeroConta);
+                debugPrint('${transferenciaCriada.valor}');
+                debugPrint('${transferenciaCriada.numeroConta}');
+                Scaffold.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(
+                        'R\$ ${transferenciaCriada.valor} transferidos para ${transferenciaCriada.numeroConta} '),
+                  ),
+                );
+              }
+            },
+            child: Text('Confirmar'),
+          )
+        ],
+      ),
+    );
   }
 }
 
