@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 void main() {
   /*  
@@ -50,52 +51,39 @@ class FormularioTransferencia extends StatelessWidget {
       ),
       body: Column(
         children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              controller: _controladorCampoNumeroConta,
-              style: TextStyle(fontSize: 16.0),
-              decoration: InputDecoration(
-                  labelText: 'Número da conta', hintText: 'XXX.XXX.XX'),
-              keyboardType: TextInputType.number,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              controller: _controladorCampoValor,
-              style: TextStyle(fontSize: 16.0),
-              decoration: InputDecoration(
-                  icon: Icon(Icons.monetization_on),
-                  labelText: 'Valor',
-                  hintText: '0.00'),
-              keyboardType: TextInputType.number,
-            ),
-          ),
+          Editor(
+              controlador: _controladorCampoNumeroConta,
+              dica: 'Número da conta',
+              rotulo: 'XXX.XXX.XXX'),
+          Editor(
+              controlador: _controladorCampoValor,
+              dica: 'Valor',
+              rotulo: '0.00',
+              icone: Icons.monetization_on),
           RaisedButton(
             onPressed: () {
-              debugPrint('Toque no confirmar');
-              final int numeroConta =
-                  int.tryParse(_controladorCampoNumeroConta.text);
-              final double valor = double.tryParse(_controladorCampoValor.text);
-
-              if (numeroConta != null && valor != null) {
-                final transferenciaCriada = Transferencia(valor, numeroConta);
-                debugPrint('${transferenciaCriada.valor}');
-                debugPrint('${transferenciaCriada.numeroConta}');
-                Scaffold.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(
-                        'R\$ ${transferenciaCriada.valor} transferidos para ${transferenciaCriada.numeroConta} '),
-                  ),
-                );
-              }
+              _criaTransferencia(context);
             },
             child: Text('Confirmar'),
           )
         ],
       ),
     );
+  }
+
+  void _criaTransferencia(BuildContext context) {
+    final int numeroConta = int.tryParse(_controladorCampoNumeroConta.text);
+    final double valor = double.tryParse(_controladorCampoValor.text);
+
+    if (numeroConta != null && valor != null) {
+      final transferenciaCriada = Transferencia(valor, numeroConta);
+      Scaffold.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+              'R\$ ${transferenciaCriada.valor} transferidos para ${transferenciaCriada.numeroConta} '),
+        ),
+      );
+    }
   }
 }
 
@@ -114,6 +102,34 @@ Refatoramento de código:
   - StatefulWidget: Funciona semelhante ao Stateless, porém com a diferença de que é possível modificar dinamicamente o conteúdo de um Widget dinamicamente. Por exemplo, eventos que ocorrem num applicativo podem transformar as propriedades dentro dele.
 
 */
+
+class Editor extends StatelessWidget {
+  final TextEditingController controlador;
+  final String rotulo;
+  final String dica;
+  final IconData icone;
+
+  Editor({this.controlador, this.rotulo, this.dica, this.icone});
+  //Quando um construtor recebe {} quer dizer que os parâmetros dentro das chaves são opcionais, dentro da classe, porém, esses parâmetros devem ser públicos.
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: TextField(
+        controller: controlador,
+        style: TextStyle(fontSize: 16.0),
+        decoration: InputDecoration(
+          icon: icone != null ? Icon(icone) : null,
+          labelText: rotulo,
+          hintText: dica,
+        ),
+        keyboardType: TextInputType.number,
+      ),
+    );
+  }
+}
+
 class ListaTransferencia extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
