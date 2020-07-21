@@ -132,7 +132,7 @@ class Editor extends StatelessWidget {
   }
 }
 
-class ListaTransferencia extends StatelessWidget {
+class ListaTransferencia extends StatefulWidget {
   /* 
     ListView é um widget diferente do colunm, pois nessa lista é gerada uma função de scroll
   Para que a list view se torne dinâmica é necessário utilizar um builder.
@@ -142,20 +142,24 @@ class ListaTransferencia extends StatelessWidget {
   final List<Transferencia> _transferencias = List();
 
   @override
+  State<StatefulWidget> createState() {
+    return ListaTransferenciasState();
+  }
+}
+
+class ListaTransferenciasState extends State<ListaTransferencia> {
+  @override
   Widget build(BuildContext context) {
-
-    _transferencias.add(Transferencia(100.0, 10000));
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Transferências'),
       ),
       body: ListView.builder(
-        itemCount: _transferencias
+        itemCount: widget._transferencias
             .length, //Informa ao ListView o número de itens da lista,
         itemBuilder: (context, indice) {
           //Cria os itens da lista importando as transferências
-          final transferencia = _transferencias[indice];
+          final transferencia = widget._transferencias[indice];
           return ItemTransferencia(transferencia);
         },
       ),
@@ -172,7 +176,8 @@ class ListaTransferencia extends StatelessWidget {
             debugPrint('Chegou no then do future');
             debugPrint('${transferenciaRecebida.valor}');
             debugPrint('${transferenciaRecebida.numeroConta}');
-            _transferencias.add(transferenciaRecebida);
+            widget._transferencias.add(transferenciaRecebida);
+            setState(() {});
           });
         },
         child: Icon(Icons.add),
