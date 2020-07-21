@@ -32,7 +32,7 @@ class BytebankApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: FormularioTransferencia(),
+        body: ListaTransferencia(),
       ),
     );
   }
@@ -47,7 +47,7 @@ class FormularioTransferencia extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Criar AppBar'),
+        title: Text('Transferir Dinheiro'),
       ),
       body: Column(
         children: <Widget>[
@@ -77,6 +77,8 @@ class FormularioTransferencia extends StatelessWidget {
 
     if (numeroConta != null && valor != null) {
       final transferenciaCriada = Transferencia(valor, numeroConta);
+      debugPrint('$transferenciaCriada');
+      Navigator.pop(context, transferenciaCriada);
       Scaffold.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -131,21 +133,48 @@ class Editor extends StatelessWidget {
 }
 
 class ListaTransferencia extends StatelessWidget {
+  /* 
+    ListView é um widget diferente do colunm, pois nessa lista é gerada uma função de scroll
+  Para que a list view se torne dinâmica é necessário utilizar um builder.
+  Desta forma, o children é a concatenação de elementos estáticos. Neste caso, não precisaremos dele, pois, neste app, a intesão é criar um histórico de transferència que se atualiza dinamicamente.
+  
+  Para isso, é criada uma lista que funcionará como uma font on meu widget vai buscar as informações para serem atualizadas.*/
+  final List<Transferencia> _transferencias = List();
+
   @override
   Widget build(BuildContext context) {
+
+    _transferencias.add(Transferencia(100.0, 10000));
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Transferências'),
       ),
-      body: Column(
-        children: <Widget>[
-          ItemTransferencia(Transferencia(100.0, 064)),
-          ItemTransferencia(Transferencia(200.0, 520)),
-          ItemTransferencia(Transferencia(300.0, 520)),
-        ],
+      body: ListView.builder(
+        itemCount: _transferencias
+            .length, //Informa ao ListView o número de itens da lista,
+        itemBuilder: (context, indice) {
+          //Cria os itens da lista importando as transferências
+          final transferencia = _transferencias[indice];
+          return ItemTransferencia(transferencia);
+        },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          /*
+          Future é uma função destinada para recolher informações depois da entrada de dados
+           */
+          final Future<Transferencia> future =
+              Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return FormularioTransferencia();
+          }));
+          future.then((transferenciaRecebida) {
+            debugPrint('Chegou no then do future');
+            debugPrint('${transferenciaRecebida.valor}');
+            debugPrint('${transferenciaRecebida.numeroConta}');
+            _transferencias.add(transferenciaRecebida);
+          });
+        },
         child: Icon(Icons.add),
       ),
     );
