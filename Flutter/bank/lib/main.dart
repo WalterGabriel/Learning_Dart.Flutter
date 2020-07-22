@@ -38,38 +38,47 @@ class BytebankApp extends StatelessWidget {
   }
 }
 
-class FormularioTransferencia extends StatelessWidget {
-  final TextEditingController _controladorCampoNumeroConta =
-      TextEditingController();
-  final TextEditingController _controladorCampoValor = TextEditingController();
+class FormularioTransferencia extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return FormularioTransferenciaState();
+  }
+}
 
+class FormularioTransferenciaState extends State<FormularioTransferencia> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Transferir Dinheiro'),
       ),
-      body: Column(
-        children: <Widget>[
-          Editor(
-              controlador: _controladorCampoNumeroConta,
-              dica: 'Número da conta',
-              rotulo: 'XXX.XXX.XXX'),
-          Editor(
-              controlador: _controladorCampoValor,
-              dica: 'Valor',
-              rotulo: '0.00',
-              icone: Icons.monetization_on),
-          RaisedButton(
-            onPressed: () {
-              _criaTransferencia(context);
-            },
-            child: Text('Confirmar'),
-          )
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Editor(
+                controlador: _controladorCampoNumeroConta,
+                dica: 'Número da conta',
+                rotulo: 'XXX.XXX.XXX'),
+            Editor(
+                controlador: _controladorCampoValor,
+                dica: 'Valor',
+                rotulo: '0.00',
+                icone: Icons.monetization_on),
+            RaisedButton(
+              onPressed: () {
+                _criaTransferencia(context);
+              },
+              child: Text('Confirmar'),
+            )
+          ],
+        ),
       ),
     );
   }
+
+  final TextEditingController _controladorCampoNumeroConta =
+      TextEditingController();
+  final TextEditingController _controladorCampoValor = TextEditingController();
 
   void _criaTransferencia(BuildContext context) {
     final int numeroConta = int.tryParse(_controladorCampoNumeroConta.text);
@@ -173,11 +182,17 @@ class ListaTransferenciasState extends State<ListaTransferencia> {
             return FormularioTransferencia();
           }));
           future.then((transferenciaRecebida) {
-            debugPrint('Chegou no then do future');
-            debugPrint('${transferenciaRecebida.valor}');
-            debugPrint('${transferenciaRecebida.numeroConta}');
-            widget._transferencias.add(transferenciaRecebida);
-            setState(() {});
+            Future.delayed(Duration(seconds: 1), () {
+              debugPrint('Chegou no then do future');
+              debugPrint('${transferenciaRecebida.valor}');
+              debugPrint('${transferenciaRecebida.numeroConta}');
+
+              if (transferenciaRecebida != null) {
+                setState(() {
+                  widget._transferencias.add(transferenciaRecebida);
+                });
+              }
+            });
           });
         },
         child: Icon(Icons.add),
